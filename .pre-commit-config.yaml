@@ -1,0 +1,37 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-added-large-files
+    - id: pretty-format-json
+
+- repo: https://github.com/rhysd/actionlint
+  rev: v1.7.7
+  hooks:
+    - id: actionlint
+
+- repo: https://github.com/adrienverge/yamllint
+  rev: v1.37.1
+  hooks:
+    - id: yamllint
+
+- repo: https://github.com/golangci/golangci-lint
+  rev: v2.1.6
+  hooks:
+    - id: golangci-lint-config-verify
+      name: golangci-lint-config-verify
+      description: Verifies the configuration file
+      entry: golangci-lint config verify
+      files: '\.golangci\.(?:yml|yaml|toml|json)'
+      language: golang
+      pass_filenames: false
+    - id: golangci-lint
+      name: golangci-lint
+      description: Fast linters runner for Go. Note that only modified files are linted, so linters like 'unused' that need to scan all files won't work as expected.
+      entry: golangci-lint run --new-from-rev HEAD --fix
+      types: [go]
+      language: golang
+      require_serial: true
+      pass_filenames: false
