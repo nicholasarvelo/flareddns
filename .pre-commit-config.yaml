@@ -12,11 +12,6 @@ repos:
   hooks:
     - id: actionlint
 
-- repo: https://github.com/adrienverge/yamllint
-  rev: v1.37.1
-  hooks:
-    - id: yamllint
-
 - repo: https://github.com/golangci/golangci-lint
   rev: v2.1.6
   hooks:
