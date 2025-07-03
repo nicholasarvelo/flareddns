@@ -1,4 +1,4 @@
-FROM golang:1.21
+FROM golang:1.24
 
 LABEL org.opencontainers.title="flareDDNS"
 LABEL org.opencontainers.image.authors="nicholas@arvelo.dev"
