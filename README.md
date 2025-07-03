@@ -80,7 +80,7 @@ So I decided to write my own, which resulted in this Dynamic DNS client for Clou
     ```shell
     export CF_API_KEY=dd109b2b7b0f1a3dfab1ad8b #Your Cloudflare API token
     export CF_DNS_RECORD_TYPE=A #DNS record type (A or AAAA)
-    export CF_ZONE_NAME= dobbs.dev #Your Cloudflare zone name
+    export CF_ZONE_NAME=dobbs.dev #Your Cloudflare zone name
     ```
 5. Set optional environment variables:
     ```shell
