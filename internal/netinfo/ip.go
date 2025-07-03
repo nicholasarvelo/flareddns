@@ -10,29 +10,33 @@ import (
 
 func QueryPublicIP(recordType string) (string, error) {
 	var protocol string
-	if recordType == "A" {
+	switch recordType {
+	case "A":
 		protocol = "ipv4"
-	} else if recordType == "AAAA" {
+	case "AAAA":
 		protocol = "ipv6"
+	default:
+		return "", fmt.Errorf("unsupported record type: %s", recordType)
 	}
+
 	url := fmt.Sprintf("https://%s.icanhazip.com", protocol)
-	request, errorOccurred := http.Get(url)
-	if errorOccurred != nil {
-		log.Println(errorOccurred)
+	request, err := http.Get(url)
+	if err != nil {
+		log.Println(err)
 	}
 	// It's good practice to close the response body after processing the
 	// response. This ensures that any associated network resources are released
 	// and also prevent resource leaks.
 	defer func() {
-		if errorOccurred := request.Body.Close(); errorOccurred != nil {
-			log.Printf("Failed to close response body: %v", errorOccurred)
+		if err := request.Body.Close(); err != nil {
+			log.Printf("Failed to close response body: %v", err)
 		}
 	}()
 
 	// Read the entire response body from the HTTP request and stores it.
-	response, errorOccurred := io.ReadAll(request.Body)
-	if errorOccurred != nil {
-		log.Println(errorOccurred)
+	response, err := io.ReadAll(request.Body)
+	if err != nil {
+		log.Println(err)
 	}
 
 	currentPublicIP := strings.TrimRight(string(response), "\n")
