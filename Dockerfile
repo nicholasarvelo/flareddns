@@ -1,5 +1,5 @@
 # Build Stage
-FROM golang:latest AS builder
+FROM golang:1.24-alpine AS builder
 
 LABEL org.opencontainers.image.title="flareDDNS"
 LABEL org.opencontainers.image.authors="nicholas@arvelo.dev"
@@ -12,6 +12,9 @@ COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 COPY . .
+
+ENV CGO_ENABLED=0
+ENV GOOS=linux
 
 RUN go build -v -o flareddns ./cmd/flareddns
 
