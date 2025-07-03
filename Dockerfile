@@ -1,16 +1,25 @@
-FROM golang:1.24
+# Build Stage
+FROM golang:latest AS builder
 
-LABEL org.opencontainers.title="flareDDNS"
+LABEL org.opencontainers.image.title="flareDDNS"
 LABEL org.opencontainers.image.authors="nicholas@arvelo.dev"
-LABEL org.opencontainers.description="Dynamic DNS Client for Cloudflare"
-LABEL org.opencontainers.source="https://github.com/steptimeeditor/flareddns"
+LABEL org.opencontainers.image.description="Dynamic DNS Client for Cloudflare"
+LABEL org.opencontainers.image.source="https://github.com/steptimeeditor/flareddns"
 
-WORKDIR /usr/src/flareddns
+WORKDIR /app
 
 COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 COPY . .
-RUN go build -v -o /usr/local/bin/flareddns ./...
 
-CMD ["flareddns"]
+RUN go build -v -o flareddns ./cmd/flareddns
+
+# Runtime Stage
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+
+COPY --from=builder /app/flareddns /usr/local/bin/flareddns
+
+ENTRYPOINT ["/usr/local/bin/flareddns"]
