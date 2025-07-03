@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/nicholasarvelo/flareddns/internal/util"
 	"log"
 	"os"
 	"strconv"
@@ -17,45 +18,62 @@ type ClientConfig struct {
 }
 
 func ParseVariables() (ClientConfig, error) {
-	requiredVariables := []string{
-		"CF_API_KEY",
-		"CF_DNS_RECORD_TYPE",
-		"CF_ZONE_NAME",
+	var cfg ClientConfig
+
+	required := map[string]*string{
+		"CF_API_KEY":         &cfg.APIKey,
+		"CF_DNS_RECORD_TYPE": &cfg.RecordType,
+		"CF_ZONE_NAME":       &cfg.ZoneName,
 	}
 
-	clientConfig := ClientConfig{}
-	for _, variable := range requiredVariables {
-		val := os.Getenv(variable)
-		if val == "" {
-			return clientConfig, fmt.Errorf("environment variable '%s' is required", variable)
+	for key, ref := range required {
+		val, ok := os.LookupEnv(key)
+		if !ok || val == "" {
+			return cfg, fmt.Errorf("missing required environment variable: %s", key)
+		}
+		*ref = val
+
+		if key == "CF_API_KEY" {
+			log.Printf("%s set to %q", key, util.ObfuscateVariable(val))
+		} else {
+			log.Printf("%s set to %q", key, val)
 		}
 	}
 
-	if val := os.Getenv("CF_DNS_RECORD"); val != "" {
-		log.Println("'CF_DNS_RECORD' undefined, proceeding with Apex record.")
-		apexRecord := os.Getenv("CF_ZONE_NAME")
-		clientConfig.RecordValue = apexRecord
+	// Optional: CF_DNS_RECORD
+	if val, ok := os.LookupEnv("CF_DNS_RECORD"); ok && val != "" {
+		cfg.RecordValue = val
+		log.Printf("CF_DNS_RECORD set to %q", val)
+	} else {
+		cfg.RecordValue = cfg.ZoneName
+		log.Printf("CF_DNS_RECORD not set; using apex record %q", cfg.ZoneName)
 	}
 
-	if val := os.Getenv("CF_POLLING_INTERVAL"); val != "" {
+	// Optional: CF_POLLING_INTERVAL
+	if val, ok := os.LookupEnv("CF_POLLING_INTERVAL"); ok && val != "" {
 		polling, err := strconv.Atoi(val)
 		if err != nil {
-			return clientConfig, fmt.Errorf("invalid value for 'CF_POLLING_INTERVAL': %w", err)
+			return cfg, fmt.Errorf("invalid CF_POLLING_INTERVAL: %w", err)
 		}
-		clientConfig.PollingInterval = polling
+		cfg.PollingInterval = polling
+		log.Printf("CF_POLLING_INTERVAL set to %d", polling)
 	} else {
-		clientConfig.PollingInterval = 60
+		cfg.PollingInterval = 60
+		log.Printf("CF_POLLING_INTERVAL not set; using default %d", cfg.PollingInterval)
 	}
 
-	if val := os.Getenv("CF_PROXIED"); val != "" {
+	// Optional: CF_PROXIED
+	if val, ok := os.LookupEnv("CF_PROXIED"); ok && val != "" {
 		proxied, err := strconv.ParseBool(val)
 		if err != nil {
-			return clientConfig, fmt.Errorf("invalid boolean value for 'CF_PROXIED': %w", err)
+			return cfg, fmt.Errorf("invalid CF_PROXIED: %w", err)
 		}
-		clientConfig.Proxied = proxied
+		cfg.Proxied = proxied
+		log.Printf("CF_PROXIED set to %t", proxied)
 	} else {
-		clientConfig.Proxied = false
+		cfg.Proxied = false
+		log.Printf("CF_PROXIED not set; using default %t", cfg.Proxied)
 	}
 
-	return clientConfig, nil
+	return cfg, nil
 }
