@@ -5,11 +5,13 @@ import (
 	"github.com/nicholasarvelo/flareddns/internal/client"
 	"github.com/nicholasarvelo/flareddns/internal/config"
 	"github.com/nicholasarvelo/flareddns/internal/scheduler"
+	"github.com/nicholasarvelo/flareddns/internal/ui"
 	"log"
 	"runtime"
 )
 
 func main() {
+	ui.PrintBanner()
 	clientConfig := loadConfig()
 	cloudflareClient := client.CreateCloudflareClient(clientConfig.APIKey)
 	cronSchedule := fmt.Sprintf("@every %dm", clientConfig.PollingInterval)
