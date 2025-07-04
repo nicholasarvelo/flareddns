@@ -9,7 +9,7 @@ import (
 )
 
 type ClientConfig struct {
-	APIKey          string
+	APIToken        string
 	RecordType      string
 	RecordValue     string
 	ZoneName        string
@@ -21,7 +21,7 @@ func ParseVariables() (ClientConfig, error) {
 	var cfg ClientConfig
 
 	required := map[string]*string{
-		"CF_API_KEY":         &cfg.APIKey,
+		"CF_API_KEY":         &cfg.APIToken,
 		"CF_DNS_RECORD_TYPE": &cfg.RecordType,
 		"CF_ZONE_NAME":       &cfg.ZoneName,
 	}
