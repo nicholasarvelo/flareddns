@@ -15,7 +15,7 @@ import (
 func main() {
 	ui.PrintBanner()
 	clientConfig := loadConfig()
-	cloudflareClient := client.CreateCloudflareClient(clientConfig.APIKey)
+	cloudflareClient := client.CreateCloudflareClient(clientConfig.APIToken)
 	log.Println("flareDDNS started")
 	initialRecordSync(cloudflareClient, clientConfig)
 	cronSchedule := fmt.Sprintf("@every %dm", clientConfig.PollingInterval)
@@ -39,8 +39,14 @@ func initialRecordSync(
 	log.Println("Running initial DNS record sync")
 	dns.SyncDNSRecord(client, clientConfig)
 	if clientConfig.PollingInterval > 1 {
-		log.Printf("flareDDNS will now poll every %d minutes", clientConfig.PollingInterval)
+		log.Printf(
+			"flareDDNS will now poll every %d minutes",
+			clientConfig.PollingInterval,
+		)
 	} else {
-		log.Printf("flareDDNS will now poll every %d minute", clientConfig.PollingInterval)
+		log.Printf(
+			"flareDDNS will now poll every %d minute",
+			clientConfig.PollingInterval,
+		)
 	}
 }
