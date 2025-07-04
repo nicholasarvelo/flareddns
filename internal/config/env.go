@@ -21,7 +21,7 @@ func ParseVariables() (ClientConfig, error) {
 	var cfg ClientConfig
 
 	required := map[string]*string{
-		"CF_API_KEY":         &cfg.APIToken,
+		"CF_API_TOKEN":       &cfg.APIToken,
 		"CF_DNS_RECORD_TYPE": &cfg.RecordType,
 		"CF_ZONE_NAME":       &cfg.ZoneName,
 	}
@@ -33,7 +33,7 @@ func ParseVariables() (ClientConfig, error) {
 		}
 		*ref = val
 
-		if key == "CF_API_KEY" {
+		if key == "CF_API_TOKEN" {
 			log.Printf("%s set to %q", key, util.ObfuscateVariable(val))
 		} else {
 			log.Printf("%s set to %q", key, val)
@@ -59,7 +59,10 @@ func ParseVariables() (ClientConfig, error) {
 		log.Printf("CF_POLLING_INTERVAL set to %d", polling)
 	} else {
 		cfg.PollingInterval = 60
-		log.Printf("CF_POLLING_INTERVAL not set; using default %d", cfg.PollingInterval)
+		log.Printf(
+			"CF_POLLING_INTERVAL not set; using default %d",
+			cfg.PollingInterval,
+		)
 	}
 
 	// Optional: CF_PROXIED
