@@ -22,7 +22,10 @@ func RetrieveRecord(
 
 	zoneID, err := apiClient.ZoneIDByName(zoneName)
 	if err != nil {
-		return ZoneRecord{}, fmt.Errorf("failed to retrieve Cloudflare zone ID: %w", err)
+		return ZoneRecord{}, fmt.Errorf(
+			"failed to retrieve Cloudflare zone ID: %w",
+			err,
+		)
 	}
 
 	records, _, err := apiClient.ListDNSRecords(
@@ -35,7 +38,10 @@ func RetrieveRecord(
 	}
 
 	if len(records) == 0 {
-		return ZoneRecord{}, fmt.Errorf("no DNS records found for name: %s", recordName)
+		return ZoneRecord{}, fmt.Errorf(
+			"no DNS records found for name: %q",
+			recordName,
+		)
 	}
 
 	return ZoneRecord{

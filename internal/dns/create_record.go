@@ -37,7 +37,7 @@ func CreateRecord(
 		log.Printf("Failed to create record: %s", err)
 	}
 	log.Printf(
-		"Record Created: '%s' is resolving to '%s'",
+		"Record Created: %q is resolving to %q",
 		clientConfig.RecordValue,
 		currentPublicIP,
 	)

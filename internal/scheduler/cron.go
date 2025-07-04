@@ -43,7 +43,7 @@ func syncDNSRecord(client *cloudflare.API, cfg config.ClientConfig) {
 		}
 	default:
 		log.Printf(
-			"Record valid: '%s' is already resolving to '%s'",
+			"Record valid: %q is already resolving to %q",
 			cfg.RecordValue,
 			currentIP,
 		)
