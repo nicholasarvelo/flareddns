@@ -16,7 +16,7 @@ func QueryPublicIP(recordType string) (string, error) {
 	case "AAAA":
 		protocol = "ipv6"
 	default:
-		return "", fmt.Errorf("unsupported record type: %s", recordType)
+		return "", fmt.Errorf("unsupported record type: %q", recordType)
 	}
 
 	url := fmt.Sprintf("https://%s.icanhazip.com", protocol)
