@@ -29,38 +29,38 @@ func ParseVariables() (ClientConfig, error) {
 	for key, ref := range required {
 		val, ok := os.LookupEnv(key)
 		if !ok || val == "" {
-			return cfg, fmt.Errorf("missing required environment variable: %s", key)
+			return cfg, fmt.Errorf("missing required environment variable: %q", key)
 		}
 		*ref = val
 
 		if key == "CF_API_TOKEN" {
-			log.Printf("%s set to %q", key, util.ObfuscateVariable(val))
+			log.Printf("%q set to %q", key, util.ObfuscateVariable(val))
 		} else {
-			log.Printf("%s set to %q", key, val)
+			log.Printf("%q set to %q", key, val)
 		}
 	}
 
 	// Optional: CF_DNS_RECORD
 	if val, ok := os.LookupEnv("CF_DNS_RECORD"); ok && val != "" {
 		cfg.RecordValue = val
-		log.Printf("CF_DNS_RECORD set to %q", val)
+		log.Printf("\"CF_DNS_RECORD\" set to %q", val)
 	} else {
 		cfg.RecordValue = cfg.ZoneName
-		log.Printf("CF_DNS_RECORD not set; using apex record %q", cfg.ZoneName)
+		log.Printf("\"CF_DNS_RECORD\" not set; using apex record %q", cfg.ZoneName)
 	}
 
 	// Optional: CF_POLLING_INTERVAL
 	if val, ok := os.LookupEnv("CF_POLLING_INTERVAL"); ok && val != "" {
 		polling, err := strconv.Atoi(val)
 		if err != nil {
-			return cfg, fmt.Errorf("invalid CF_POLLING_INTERVAL value: %w", err)
+			return cfg, fmt.Errorf("invalid \"CF_POLLING_INTERVAL\" value: %w", err)
 		}
 		cfg.PollingInterval = polling
-		log.Printf("CF_POLLING_INTERVAL set to %d", polling)
+		log.Printf("\"CF_POLLING_INTERVAL\" set to %q", strconv.Itoa(polling))
 	} else {
 		cfg.PollingInterval = 60
 		log.Printf(
-			"CF_POLLING_INTERVAL not set; using default %d",
+			"\"CF_POLLING_INTERVAL\" not set; using default %q minutes",
 			cfg.PollingInterval,
 		)
 	}
@@ -69,13 +69,16 @@ func ParseVariables() (ClientConfig, error) {
 	if val, ok := os.LookupEnv("CF_PROXIED"); ok && val != "" {
 		proxied, err := strconv.ParseBool(val)
 		if err != nil {
-			return cfg, fmt.Errorf("invalid CF_PROXIED: %w", err)
+			return cfg, fmt.Errorf("invalid \"CF_PROXIED\" value: %w", err)
 		}
 		cfg.Proxied = proxied
-		log.Printf("CF_PROXIED set to %t", proxied)
+		log.Printf("\"CF_PROXIED\" set to %q", strconv.FormatBool(proxied))
 	} else {
 		cfg.Proxied = false
-		log.Printf("CF_PROXIED not set; using default %t", cfg.Proxied)
+		log.Printf(
+			"\"CF_PROXIED\" not set; using default %q",
+			strconv.FormatBool(cfg.Proxied),
+		)
 	}
 
 	return cfg, nil
