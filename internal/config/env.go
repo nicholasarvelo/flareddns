@@ -53,7 +53,7 @@ func ParseVariables() (ClientConfig, error) {
 	if val, ok := os.LookupEnv("CF_POLLING_INTERVAL"); ok && val != "" {
 		polling, err := strconv.Atoi(val)
 		if err != nil {
-			return cfg, fmt.Errorf("invalid CF_POLLING_INTERVAL: %w", err)
+			return cfg, fmt.Errorf("invalid CF_POLLING_INTERVAL value: %w", err)
 		}
 		cfg.PollingInterval = polling
 		log.Printf("CF_POLLING_INTERVAL set to %d", polling)

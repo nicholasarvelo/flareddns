@@ -1,22 +1,22 @@
-package scheduler
+package dns
 
 import (
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/nicholasarvelo/flareddns/internal/config"
-	"github.com/nicholasarvelo/flareddns/internal/dns"
 	"github.com/nicholasarvelo/flareddns/internal/netinfo"
-	"github.com/robfig/cron/v3"
 	"log"
 )
 
-func syncDNSRecord(client *cloudflare.API, cfg config.ClientConfig) {
+// SyncDNSRecord compares the current public IP with the DNS record and
+// creates or updates the record on Cloudflare as needed.
+func SyncDNSRecord(client *cloudflare.API, cfg config.ClientConfig) {
 	currentIP, err := netinfo.QueryPublicIP(cfg.RecordType)
 	if err != nil {
 		log.Printf("Failed to get public IP: %v", err)
 		return
 	}
 
-	record, err := dns.RetrieveRecord(client, cfg.RecordValue, cfg.ZoneName)
+	record, err := RetrieveRecord(client, cfg.RecordValue, cfg.ZoneName)
 	if err != nil {
 		log.Printf("Failed to retrieve DNS record: %v", err)
 		return
@@ -25,7 +25,7 @@ func syncDNSRecord(client *cloudflare.API, cfg config.ClientConfig) {
 	switch {
 	case record.Value == "":
 		log.Println("DNS record not found. Creating...")
-		if err := dns.CreateRecord(
+		if err := CreateRecord(
 			client,
 			cfg,
 			record.ZoneIdentifier,
@@ -34,7 +34,7 @@ func syncDNSRecord(client *cloudflare.API, cfg config.ClientConfig) {
 		}
 	case record.Value != currentIP:
 		log.Println("DNS record outdated. Updating...")
-		if err := dns.UpdateRecord(
+		if err := UpdateRecord(
 			client,
 			cfg,
 			record.ZoneIdentifier,
@@ -48,21 +48,4 @@ func syncDNSRecord(client *cloudflare.API, cfg config.ClientConfig) {
 			currentIP,
 		)
 	}
-}
-
-func StartCronJob(
-	schedule string,
-	client *cloudflare.API,
-	cfg config.ClientConfig,
-) {
-	cronJob := cron.New()
-	_, err := cronJob.AddFunc(
-		schedule, func() {
-			syncDNSRecord(client, cfg)
-		},
-	)
-	if err != nil {
-		log.Fatalf("Failed to add cron job: %v", err)
-	}
-	cronJob.Start()
 }

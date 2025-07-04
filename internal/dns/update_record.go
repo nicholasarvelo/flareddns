@@ -12,7 +12,7 @@ import (
 )
 
 func UpdateRecord(
-	client cloudflare.API,
+	client *cloudflare.API,
 	clientConfig config.ClientConfig,
 	zoneID *cloudflare.ResourceContainer,
 ) error {

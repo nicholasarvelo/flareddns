@@ -3,7 +3,6 @@ package dns
 import (
 	"context"
 	"fmt"
-
 	"github.com/cloudflare/cloudflare-go"
 )
 
@@ -15,7 +14,7 @@ type ZoneRecord struct {
 // RetrieveRecord queries Cloudflare for a DNS record by name and zone name.
 // Returns the first matching record found, or an error if none exist.
 func RetrieveRecord(
-	apiClient cloudflare.API,
+	apiClient *cloudflare.API,
 	recordName string,
 	zoneName string,
 ) (ZoneRecord, error) {
