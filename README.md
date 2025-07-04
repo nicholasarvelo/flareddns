@@ -19,41 +19,6 @@ So I decided to write my own, which resulted in this Dynamic DNS client for Clou
 
 ## Quick Start
 
-### Running the Docker Image
-
-#### Prerequisites
-
-* A Cloudflare account.
-* A user-generated [Cloudflare API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/).
-
-#### Steps to Run
-
-1. Pull down the image:
-    ```shell
-    docker pull steptimeeditor/flareddns
-    ```
-2. Set required environment variables:
-    * `CF_API_KEY`
-    * `CF_DNS_RECORD_TYPE`
-    * `CF_ZONE_NAME`
-
-3. Set optional environment variables:
-    * `CF_DNS_RECORD`
-    * `CF_POLLING_INTERVAL`
-    * `CF_PROXIED`: Sets the [Proxy status](https://developers.cloudflare.com/dns/manage-dns-records/reference/proxied-dns-records/) of the DNS record. Allowed: `true` or `false`. Default: `false`.
-      * Note: `flareddns` cannot modify the proxied status of an existing record yet.
-
-4. Start the container:
-    ```shell
-    docker run -d \
-      -e CLOUDFLARE_API_KEY=your_token \
-      -e CLOUDFLARE_DNS_RECORD=foo.bar.com \
-      steptimeeditor/flareddns
-    ```
-
-5. Check the container logs for status and troubleshooting.
-
-
 ### Building and Running locally
 
 #### Prerequisites
@@ -92,8 +57,6 @@ So I decided to write my own, which resulted in this Dynamic DNS client for Clou
     ```shell
     ./flareddns
     ```
-The client will start polling your public IP and update the Cloudflare DNS record as needed.
-
 ---
 
 ### Code Structure
