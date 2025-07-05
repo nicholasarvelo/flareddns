@@ -4,10 +4,17 @@
 
 FROM golang:alpine AS builder
 
+ARG VERSION
+ARG COMMIT
+ARG BUILD_DATE
+
 LABEL org.opencontainers.image.title="flareDDNS"
-LABEL org.opencontainers.image.authors="nicholas@arvelo.dev"
 LABEL org.opencontainers.image.description="Dynamic DNS Client for Cloudflare"
+LABEL org.opencontainers.image.authors="nicholas@arvelo.dev"
 LABEL org.opencontainers.image.source="https://github.com/steptimeeditor/flareddns"
+LABEL org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.revision="${COMMIT}"
+LABEL org.opencontainers.image.created="${BUILD_DATE}"
 
 WORKDIR /app
 

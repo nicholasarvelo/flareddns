@@ -41,3 +41,7 @@ jobs:
           tags: >
             ${{ secrets.dockerhub_losername }}/${{ env.docker_image_name }}:latest,
             ${{ secrets.dockerhub_losername }}/${{ env.docker_image_name }}:${{ env.image_version }}
+          build-args: |
+            VERSION=${{ env.image_version }}
+            COMMIT=${{ github.sha }}
+            BUILD_DATE=${{ github.event.head_commit.timestamp }}
