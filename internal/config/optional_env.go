@@ -10,9 +10,9 @@ import (
 	"strconv"
 )
 
-func parseOptionalVariables() (ClientConfig, error) {
+func parseOptionalVariables(config ClientConfig) (ClientConfig, error) {
 	var clientConfig ClientConfig
-	dnsRecord, err := parseDNSRecord()
+	dnsRecord, err := parseDNSRecord(config.ZoneName)
 	if err != nil {
 		return clientConfig, fmt.Errorf("%w", err)
 	}
@@ -35,15 +35,16 @@ func parseOptionalVariables() (ClientConfig, error) {
 	return clientConfig, nil
 }
 
-func parseDNSRecord() (ClientConfig, error) {
+func parseDNSRecord(zoneName string) (ClientConfig, error) {
 	var clientConfig ClientConfig
+	apexRecord := zoneName
 	value, defined := os.LookupEnv("CF_DNS_RECORD")
 	if defined && value != "" {
 		clientConfig.RecordValue = value
 		log.Printf("\"CF_DNS_RECORD\" set to %q", value)
 		return clientConfig, nil
 	}
-	clientConfig.RecordValue = clientConfig.ZoneName
+	clientConfig.RecordValue = apexRecord
 	log.Printf(
 		"\"CF_DNS_RECORD\" not set; using apex record %q",
 		clientConfig.RecordValue,

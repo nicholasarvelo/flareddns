@@ -26,7 +26,7 @@ func ParseVariables() (ClientConfig, error) {
 		return clientConfig, fmt.Errorf("%w", err)
 	}
 
-	optionalVariable, err := parseOptionalVariables()
+	optionalVariable, err := parseOptionalVariables(requiredVariable)
 	if err != nil {
 		return clientConfig, fmt.Errorf("%w", err)
 	}
