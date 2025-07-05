@@ -66,7 +66,7 @@ func parsePollingInterval() (ClientConfig, error) {
 		clientConfig.PollingInterval = pollingInterval
 		log.Printf(
 			"\"CF_POLLING_INTERVAL\" set to %q",
-			clientConfig.PollingInterval,
+			strconv.Itoa(clientConfig.PollingInterval),
 		)
 		return clientConfig, nil
 	}
