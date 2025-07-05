@@ -1,5 +1,8 @@
-# Build Stage
-FROM golang:1.24-alpine AS builder
+# - Builder Stage
+# Compiles a statically linked binary for use in scratch
+# or distroless containers.
+
+FROM golang:alpine AS builder
 
 LABEL org.opencontainers.image.title="flareDDNS"
 LABEL org.opencontainers.image.authors="nicholas@arvelo.dev"
@@ -18,11 +21,12 @@ ENV GOOS=linux
 
 RUN go build -v -o flareddns ./cmd/flareddns
 
-# Runtime Stage
-FROM alpine:latest
+# - Final Stage
+# Builds the distroless image containing the binary.
 
-RUN apk --no-cache add ca-certificates
+FROM gcr.io/distroless/static:nonroot
 
-COPY --from=builder /app/flareddns /usr/local/bin/flareddns
+COPY --from=builder /app/flareddns /flareddns
 
-ENTRYPOINT ["/usr/local/bin/flareddns"]
+USER nonroot:nonroot
+ENTRYPOINT ["/flareddns"]
