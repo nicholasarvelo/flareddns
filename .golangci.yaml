@@ -4,66 +4,58 @@ run:
   timeout: 3m
 
 linters:
+  # Default set of linters.
+  # The value can be:
+  # - `standard`: https://golangci-lint.run/docs/linters/#enabled-by-default
+  # - `all`: enables all linters by default.
+  # - `none`: disables all linters by default.
+  # - `fast`: enables only linters considered as "fast" (`golangci-lint help linters --json | jq '[ .[] | select(.fast==true) ] | map(.name)'`).
+  # Default: standard
+  # Enable specific linter.
   enable:
-    - asasalint
-    - asciicheck
-    - bidichk
-    - bodyclose
-    - copyloopvar
-    - cyclop
-    - dupl
-    - durationcheck
-    - errcheck
-    - errname
-    - errorlint
-    - exhaustive
-    - forbidigo
-    - funlen
-    - gocheckcompilerdirectives
-    - gochecknoglobals
-    - gochecknoinits
-    - gochecksumtype
-    - gocognit
-    - goconst
-    - gocritic
-    - gocyclo
-    - godot
-    - gomoddirectives
-    - gomodguard
-    - goprintffuncname
-    - gosec
-    - govet
-    - ineffassign
-    - lll
-    - loggercheck
-    - makezero
-    - mirror
-    - mnd
-    - musttag
-    - nakedret
-    - nestif
-    - nilerr
-    - nilnil
-    - noctx
-    - nolintlint
-    - nonamedreturns
-    - nosprintfhostport
-    - perfsprint
-    - predeclared
-    - promlinter
-    - protogetter
-    - reassign
-    - revive
-    - rowserrcheck
-    - sloglint
-    - sqlclosecheck
-    - staticcheck
-    - testableexamples
-    - testifylint
-    - testpackage
-    - tparallel
-    - unconvert
-    - unused
-    - usestdlibvars
-    - wastedassign
-    - whitespace
+    - canonicalheader # Autofix
+    - copyloopvar # Autofix
+    - dupword # Autofix
+    - err113 # Autofix
+    - errcheck # Default
+    - errorlint # Autofix
+    - exptostd # Autofix
+    - fatcontext # Autofix
+    - ginkgolinter # Autofix
+    - gocritic # Autofix
+    - godot # Autofix
+    - goheader # Autofix
+    - govet # Autofix
+    - govet # Default
+    - iface # Autofix
+    - importas # Autofix
+    - ineffassign # Default
+    - intrange # Autofix
+    - mirror # Autofix
+    - misspell # Autofix
+    - nakedret # Autofix
+    - nlreturn # Autofix
+    - nolintlint # Autofix
+    - perfsprint # Autofix
+    - protogetter # Autofix
+    - revive # Autofix
+    - sloglint # Autofix
+    - staticcheck # Autofix
+    - staticcheck # Default
+    - tagalign # Autofix
+    - testifylint # Autofix
+    - unused # Default
+    - usestdlibvars # Autofix
+    - usetesting # Autofix
+    - whitespace # Autofix
+    - wsl_v5 # Autofix
+
+formatters:
+  # Enable specific formatter.
+  # Default: [] (uses standard Go formatting)
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+    - golines
