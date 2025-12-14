@@ -10,7 +10,7 @@ import (
 	"github.com/nicholasarvelo/flareddns/internal/config"
 	"github.com/nicholasarvelo/flareddns/internal/dns"
 	"github.com/nicholasarvelo/flareddns/internal/scheduler"
-	"github.com/nicholasarvelo/flareddns/internal/ui"
+	"github.com/nicholasarvelo/flareddns/internal/ux"
 )
 
 func main() {
