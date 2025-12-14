@@ -48,7 +48,6 @@ linters:
     - usestdlibvars # Autofix
     - usetesting # Autofix
     - whitespace # Autofix
-    - wsl_v5 # Autofix
 
 formatters:
   # Enable specific formatter.
