@@ -72,8 +72,8 @@ func parsePollingInterval() (ClientConfig, error) {
 	}
 	clientConfig.PollingInterval = 60
 	log.Printf(
-		"\"CF_DNS_RECORD\" not set; using apex record %q",
-		clientConfig.RecordValue,
+		"\"CF_POLLING_INTERVAL\" not set; using default %q",
+		strconv.Itoa(clientConfig.PollingInterval),
 	)
 	return clientConfig, nil
 }
