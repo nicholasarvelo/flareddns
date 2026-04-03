@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	ui.PrintBanner()
+	ux.PrintBanner()
 	clientConfig := loadConfig()
 	cloudflareClient := client.CreateCloudflareClient(clientConfig.APIToken)
 	log.Println("flareDDNS started")
