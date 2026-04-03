@@ -38,6 +38,7 @@ func syncDNSRecord(client *cloudflare.API, cfg config.ClientConfig) {
 			client,
 			cfg,
 			record.ZoneIdentifier,
+			record.RecordID,
 		); err != nil {
 			log.Printf("Failed to update record: %v", err)
 		}
