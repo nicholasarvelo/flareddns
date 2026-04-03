@@ -22,7 +22,7 @@ func QueryPublicIP(recordType string) (string, error) {
 	url := fmt.Sprintf("https://%s.icanhazip.com", protocol)
 	request, err := http.Get(url)
 	if err != nil {
-		log.Println(err)
+		return "", fmt.Errorf("failed to query public IP: %w", err)
 	}
 	// It's good practice to close the response body after processing the
 	// response. This ensures that any associated network resources are released
@@ -36,7 +36,7 @@ func QueryPublicIP(recordType string) (string, error) {
 	// Read the entire response body from the HTTP request and stores it.
 	response, err := io.ReadAll(request.Body)
 	if err != nil {
-		log.Println(err)
+		return "", fmt.Errorf("failed to read response body: %w", err)
 	}
 
 	currentPublicIP := strings.TrimRight(string(response), "\n")
