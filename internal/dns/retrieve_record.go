@@ -39,10 +39,9 @@ func RetrieveRecord(
 	}
 
 	if len(records) == 0 {
-		return ZoneRecord{}, fmt.Errorf(
-			"no DNS records found for name: %q",
-			recordName,
-		)
+		return ZoneRecord{
+			ZoneIdentifier: cloudflare.ZoneIdentifier(zoneID),
+		}, nil
 	}
 
 	return ZoneRecord{
