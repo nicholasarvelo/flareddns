@@ -15,11 +15,12 @@ func UpdateRecord(
 	client *cloudflare.API,
 	clientConfig config.ClientConfig,
 	zoneID *cloudflare.ResourceContainer,
+	recordID string,
 ) error {
 	ctx := context.Background()
 	currentPublicIP, err := netinfo.QueryPublicIP(clientConfig.RecordType)
 	if err != nil {
-		log.Printf("failed to retrieve public IP: %s", err)
+		return fmt.Errorf("failed to retrieve public IP: %w", err)
 	}
 
 	timeStamp := time.Now().Format(time.DateTime)
@@ -31,14 +32,14 @@ func UpdateRecord(
 			Name:    clientConfig.RecordValue,
 			Content: currentPublicIP,
 			Comment: comment,
-			ID:      zoneID.Identifier,
+			ID:      recordID,
 		},
 	)
 	if err != nil {
-		log.Printf("Failed to create record: %s", err)
+		log.Printf("Failed to update record: %s", err)
 	}
 	log.Printf(
-		"Record Created: %q is resolving to %q",
+		"Record Updated: %q is resolving to %q",
 		clientConfig.RecordValue,
 		currentPublicIP,
 	)

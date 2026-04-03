@@ -8,6 +8,7 @@ import (
 
 type ZoneRecord struct {
 	Value          string                        `json:"value"`
+	RecordID       string                        `json:"record_id"`
 	ZoneIdentifier *cloudflare.ResourceContainer `json:"zone_identifier"`
 }
 
@@ -38,14 +39,14 @@ func RetrieveRecord(
 	}
 
 	if len(records) == 0 {
-		return ZoneRecord{}, fmt.Errorf(
-			"no DNS records found for name: %q",
-			recordName,
-		)
+		return ZoneRecord{
+			ZoneIdentifier: cloudflare.ZoneIdentifier(zoneID),
+		}, nil
 	}
 
 	return ZoneRecord{
 		Value:          records[0].Content,
+		RecordID:       records[0].ID,
 		ZoneIdentifier: cloudflare.ZoneIdentifier(zoneID),
 	}, nil
 }

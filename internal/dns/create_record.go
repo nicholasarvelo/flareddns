@@ -18,7 +18,7 @@ func CreateRecord(
 	ctx := context.Background()
 	currentPublicIP, err := netinfo.QueryPublicIP(clientConfig.RecordType)
 	if err != nil {
-		log.Printf("failed to retrieve public IP: %s", err)
+		return fmt.Errorf("failed to retrieve public IP: %w", err)
 	}
 
 	timeStamp := time.Now().Format(time.DateTime)

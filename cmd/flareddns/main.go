@@ -2,18 +2,19 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"runtime"
+
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/nicholasarvelo/flareddns/internal/client"
 	"github.com/nicholasarvelo/flareddns/internal/config"
 	"github.com/nicholasarvelo/flareddns/internal/dns"
 	"github.com/nicholasarvelo/flareddns/internal/scheduler"
-	"github.com/nicholasarvelo/flareddns/internal/ui"
-	"log"
-	"runtime"
+	"github.com/nicholasarvelo/flareddns/internal/ux"
 )
 
 func main() {
-	ui.PrintBanner()
+	ux.PrintBanner()
 	clientConfig := loadConfig()
 	cloudflareClient := client.CreateCloudflareClient(clientConfig.APIToken)
 	log.Println("flareDDNS started")
