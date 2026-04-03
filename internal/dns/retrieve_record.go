@@ -8,6 +8,7 @@ import (
 
 type ZoneRecord struct {
 	Value          string                        `json:"value"`
+	RecordID       string                        `json:"record_id"`
 	ZoneIdentifier *cloudflare.ResourceContainer `json:"zone_identifier"`
 }
 
@@ -46,6 +47,7 @@ func RetrieveRecord(
 
 	return ZoneRecord{
 		Value:          records[0].Content,
+		RecordID:       records[0].ID,
 		ZoneIdentifier: cloudflare.ZoneIdentifier(zoneID),
 	}, nil
 }
